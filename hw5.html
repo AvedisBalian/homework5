@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HW5</title>
+	</head>
+	<body>
+	<canvas id="canvas" width="700" height="700"></canvas>
+<script>const canvas = document.getElementById('canvas');
+      const context = canvas.getContext("2d");
+      
+      const rand = function(num) {
+        return Math.floor(Math.random() * num) + 1;
+      };
+      
+      const colorArray = ['#7FFF00', '#FF1493', '#FF0000', '#00BFFF', '#FF00FF'];;
+      
+      const createbox = function(count, canvasWidth, canvasHeight){
+        
+        const points = [];
+        
+        
+        
+        const array = function(num){
+          if (num < 1) {return ""}
+          
+          
+          points.push({
+            x: rand(canvasWidth - 40),
+            y: rand(canvasHeight - 40),
+            width: 30,
+            height: 30,
+            yDelta: 1,
+            xDelta: 1,
+            color: colorArray[rand(5)-1]
+          });
+          array(num - 1);
+        };
+        
+        array(count);
+        return points;
+      };
+      
+      
+      
+      
+      const hitbam = createbox(3000, canvas.width, canvas.height);
+      
+      const forEach = function(arr, f) {
+        const helper = function(n) {
+          if(n === arr.length)
+            return;
+          
+          f(arr[n]);
+          helper(n + 1);
+        };
+        helper(0);
+      };
+      
+      const draw = function(){
+      	context.clearRect(0, 0, canvas.width, canvas.height);
+        const drawRect = function(num){
+          
+          context.fillStyle = num.color;
+          context.fillRect(num.x, num.y, num.width, num.height);
+        }
+        
+        forEach(hitbam, drawRect);
+      }
+      
+      const updateData = function(){
+        
+        const help = function(point){
+          if (point.x + point.width >= canvas.width || point.x <= 0) {
+            point.xDelta = -point.xDelta;
+            point.color = colorArray[rand(5) - 1]
+          }
+          if (point.y + point.height >= canvas.height || point.y <= 0) {
+            point.yDelta = -point.yDelta;
+            point.color = colorArray[rand(5) - 1]
+          }
+          
+          
+          
+          point.x = point.x + point.xDelta;
+          point.y = point.y + point.yDelta;
+        }
+        
+        forEach(hitbam, help);
+      }
+      
+      const loop = function(){
+        draw();
+        updateData();
+        
+        requestAnimationFrame(loop);
+      }
+      
+      loop();</script>
+	 
+
+	</body>
+</html>
